@@ -23,3 +23,6 @@ style = "Italic"
 [font.normal]
 family = "MesloLGS Nerd Font Mono"
 style = "Regular"
+
+[window]
+padding = { x = 15, y = 5 }
