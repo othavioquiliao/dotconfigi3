@@ -260,5 +260,5 @@ bindsym Ctrl+$mod+Print exec --no-startup-id maim --window $(xdotool getactivewi
 bindsym Ctrl+Shift+Print exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
 
 # policykit-1-gnome - permite instalar flatpak snap e etc sem dar
-# problema de autentificaçao
+# problema de autentificaçao - resolvido
 exec_always --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
