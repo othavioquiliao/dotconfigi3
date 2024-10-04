@@ -10,3 +10,4 @@ rofi
 feh
 Arandr
 zsh
+lxappearance (teste)
