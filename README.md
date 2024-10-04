@@ -11,3 +11,4 @@ feh
 Arandr
 zsh
 lxappearance (teste)
+Flatseal (permissoes do flatpak store)
