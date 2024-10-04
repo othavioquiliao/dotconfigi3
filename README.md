@@ -1,4 +1,7 @@
 Lista de instalaçoes
+
+
+
 i3
 picom
 polybar
