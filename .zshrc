@@ -25,7 +25,7 @@ ZSH_THEME="robbyrussell"
 
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
- zstyle ':omz:update' mode auto      # update automatically without asking
+zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
@@ -73,7 +73,7 @@ ZSH_THEME="robbyrussell"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
-
+eval "$(starship init zsh)"
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -102,6 +102,15 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias ls='eza --color=always --group-directories-first --icons'
+alias ll='eza -la --icons --octal-permissions --group-directories-first'
+alias l='eza -bGF --header --git --color=always --group-directories-first --icons'
+alias llm='eza -lbGd --header --git --sort=modified --color=always --group-directories-first --icons'
+alias la='eza --long --all --group --group-directories-first'
+alias lx='eza -lbhHigUmuSa@ --time-style=long-iso --git --color-scale --color=always --group-directories-first --icons'
+
+alias lS='eza -1 --color=always --group-directories-first --icons'
+alias lt='eza --tree --level=2 --color=always --group-directories-first --icons'
+alias l.="eza -a | grep -E '^\.'"
 
 PATH=~/.console-ninja/.bin:$PATH
-eval "$(starship init zsh)"
