@@ -13,3 +13,5 @@ Lista de instalaçoes
 - lxappearance (teste)
 - Flatseal (permissoes do flatpak store)
 - policykit-1-gnome (Corrige o erro que flatpak e snaps dao por causa de autorizaçao quando se usa i3)
+- Pavucontrol
+- blueman
