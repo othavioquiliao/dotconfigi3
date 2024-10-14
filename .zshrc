@@ -76,6 +76,7 @@ source $ZSH/oh-my-zsh.sh
 eval "$(starship init zsh)"
 # User configuration
 
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -102,6 +103,7 @@ eval "$(starship init zsh)"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias code='code-insiders'
 alias ls='eza --color=always --group-directories-first --icons'
 alias ll='eza -la --icons --octal-permissions --group-directories-first'
 alias l='eza -bGF --header --git --color=always --group-directories-first --icons'
