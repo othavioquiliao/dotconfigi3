@@ -2,54 +2,66 @@
 # -*- coding: utf-8 -*-
 set -euo pipefail
 
-# Usuário atual
+# Variáveis
 USER_NAME="${SUDO_USER:-$USER}"
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+ZSHRC="$HOME/.zshrc"
+PLUGINS=(
+  git
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  fast-syntax-highlighting
+)
+REPOS=(
+  https://github.com/zsh-users/zsh-autosuggestions.git
+  https://github.com/zsh-users/zsh-syntax-highlighting.git
+  https://github.com/zdharma-continuum/fast-syntax-highlighting.git
+)
 
-echo "🔄 Atualizando repositórios e pacotes..."
-sudo apt-get update -y
-sudo apt-get upgrade -y
+# Atualiza e instala pacotes
+echo "🔄 Atualizando sistema e instalando dependências..."
+sudo apt-get update -y \
+  && sudo add-apt-repository universe -y \
+  && sudo apt-get upgrade -y \
+  && sudo apt-get install -y git zsh curl eza
 
-echo "📦 Instalando pacotes essenciais: git, zsh, curl, eza..."
-# adiciona universe para garantir que o eza esteja disponível
-sudo add-apt-repository universe -y
-sudo apt-get update -y
-sudo apt-get install -y git zsh curl eza
-
-echo "🧙 Instalando Oh My Zsh (sem abrir novo shell)..."
+# Instala Oh My Zsh sem mudar shell automaticamente
+echo "🧙 Instalando Oh My Zsh..."
 RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
+# Instala Starship
 echo "🚀 Instalando Starship prompt..."
 sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --yes
-
-echo "Estilizando o terminal com Starship..."
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 
-
+# Clona plugins Zsh
 echo "🔌 Clonando plugins do Zsh..."
 mkdir -p "$ZSH_CUSTOM/plugins" "$ZSH_CUSTOM/completions"
+for repo in "${REPOS[@]}"; do
+  name=$(basename "$repo" .git)
+  [ -d "$ZSH_CUSTOM/plugins/$name" ] || \
+    git clone "$repo" "$ZSH_CUSTOM/plugins/$name"
+done
 
-# zsh-autosuggestions
-[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ] \
-  || git clone https://github.com/zsh-users/zsh-autosuggestions.git \
-       "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
-
-# zsh-syntax-highlighting
-[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ] \
-  || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-       "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-
-# fast-syntax-highlighting
-[ -d "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" ] \
-  || git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
-       "$ZSH_CUSTOM/plugins/fast-syntax-highlighting"
-
-echo "🔧 Gerando autocompletion do eza..."
-# eza (fork do exa) suporta geração de completions:
+# Gera autocompletion do eza
+echo "🔧 Gerando completions do eza..."
 eza --generate-completion zsh > "$ZSH_CUSTOM/completions/_eza"
 
-echo "🐚 Definindo zsh como shell padrão para $USER_NAME..."
+# Atualiza plugins no .zshrc
+echo "🔄 Atualizando plugins no $ZSHRC..."
+if grep -q '^plugins=' "$ZSHRC"; then
+  sed -i "/^plugins=/c\plugins=(${PLUGINS[*]})" "$ZSHRC"
+else
+  {
+    echo ""
+    echo "# Plugins do Oh My Zsh"
+    echo "plugins=(${PLUGINS[*]})"
+  } >> "$ZSHRC"
+fi
+
+# Define Zsh como shell padrão
+echo "🐚 Definindo Zsh como padrão para $USER_NAME..."
 sudo chsh -s "$(which zsh)" "$USER_NAME"
 
-echo "✅ Configuração inicial concluída! Abra um novo terminal para começar."
+echo "✅ Concluído! Abra um novo terminal para aplicar as mudanças."
